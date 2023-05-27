@@ -13,10 +13,10 @@ final class ViewController: UIViewController {
     @IBOutlet var segmentedControl: UISegmentedControl!
     @IBOutlet var mainLabel: UILabel!
     @IBOutlet var slider: UISlider!
-    
+    @IBOutlet var datepicker: UIDatePicker!
     @IBOutlet var textField: UITextField!
+    @IBOutlet var switchLabel: UILabel!
     
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,7 +54,7 @@ final class ViewController: UIViewController {
     
     @IBAction func doneButtonTapped() {
         guard let inputText = textField.text, !inputText.isEmpty else {
-            print("Text field is empty")
+            showAlert(withTitle: "Text field is empty", andMessage: "Please enter your name")
             return
         }
         
@@ -70,6 +70,15 @@ final class ViewController: UIViewController {
         mainLabel.text = textField.text
     }
     
+    
+    @IBAction func datePickerAction() {
+        mainLabel.text = datepicker.date.formatted(date: .long, time: .omitted)
+    }
+    
+    @IBAction func switchAction(_ sender: UISwitch) {
+        datepicker.isHidden = !sender.isOn
+        switchLabel.text = sender.isOn ? "Hide Date Picker" : "Show date picker"
+    }
     
     // MARK: - Private Methods
     private func setupMainLabel() {
@@ -92,5 +101,14 @@ final class ViewController: UIViewController {
 
 // MARK: - UIAlertController
 extension ViewController {
+    private func showAlert(withTitle title: String, andMessage message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+            self.textField.text = ""
+            
+        }
+        alert.addAction(okAction)
+        present(alert, animated: true)
+    }
     
 }
